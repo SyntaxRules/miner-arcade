@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static string SAVE_LOCATION;
-    public static Vector2 PLAYER_START_LOCATION = new Vector2(5, 1);
+    public static Vector2 PLAYER_START_LOCATION = new Vector2(7, 1);
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
     private GroundManager groundManager;                       //Store a reference to our BoardManager which will set up the level.
     public GameObject playerPrefab;

@@ -69,6 +69,7 @@ public class GroundManager : MonoBehaviour {
     public static char DESTROYED = 'd';
 
     public float groundSize = 1;
+    public float groundScale = .1f;
     public float groundDepth;
     public float groundWidth;
     public char[,] ground;
@@ -188,7 +189,8 @@ public class GroundManager : MonoBehaviour {
                     var gc = groundTile.GetComponent<Ground>();
                     if (ground[x, y] == gc.id)
                     {
-                        GameObject temp = Instantiate(groundTile, new Vector2(x * groundSize, -y * groundSize), Quaternion.identity) as GameObject;
+                        GameObject temp = Instantiate(groundTile, new Vector3(x * groundSize, -y * groundSize, 0f), Quaternion.identity) as GameObject;
+                        temp.transform.localScale = new Vector2(groundScale, groundScale);
                         temp.transform.SetParent(groundHolder);
                         break;
                     }

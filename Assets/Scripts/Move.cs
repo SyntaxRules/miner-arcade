@@ -7,7 +7,7 @@ public class Move : MonoBehaviour {
     public GameObject weapon; //leads the player.
     public float weaponOffset = .16f;
     public float jumpForce = 4.0f;
-    public static float weaponDistance = .25f;
+    public float weaponDistance = .25f;
     private bool isJumping = false;
     private bool isFalling = false;
 
@@ -19,7 +19,6 @@ public class Move : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //Debug.Log(Screen.dpi);
         //Debug.Log(Screen.width);
         //Debug.Log(Camera.current.aspect);
         //Debug.Log(Camera.current.orthographicSize);
@@ -37,6 +36,7 @@ public class Move : MonoBehaviour {
         //space to mine
         //w to jump
         //mouse to move mineing self
+        var halfWidth = Camera.main.orthographicSize * Screen.width / Screen.height; //half of the camera size
         Vector3 move;
         bool jump = false;
         float mouseAngle;
@@ -55,12 +55,10 @@ public class Move : MonoBehaviour {
         mouseAngle = Mathf.Atan2(offset.y, offset.x);// *Mathf.Rad2Deg;
 
 #endif
-        //if (transform.position.x + move.x >= 0 && 
-        //    transform.position.x + move.x <= GroundManager.instance.groundWidth )
-        {
-            //only move if it will be inside our world box
-            transform.position += move * speed * Time.deltaTime;
-        }
+       //move player
+        transform.position += move * speed * Time.deltaTime;
+        
+        //don't fall off of world
         if (transform.position.x < 0)
         {
             transform.position = new Vector3(0f, transform.position.y);
@@ -70,7 +68,23 @@ public class Move : MonoBehaviour {
             transform.position = new Vector3(GroundManager.instance.groundWidth, transform.position.y);
         }
 
+        //keep camera in world bounds
+        float rightCameraBound = GroundManager.instance.groundWidth - halfWidth;
+        if (transform.position.x <= halfWidth)
+        {
+            this.transform.GetChild(0).localPosition = new Vector3(2f * (halfWidth - this.transform.position.x), 0f, -1f);
+        }
+        else if (this.transform.position.x >= rightCameraBound) 
+        {
+            this.transform.GetChild(0).localPosition = new Vector3(this.transform.position.x + rightCameraBound, 0f, -1f);            
+        }
+        else
+        {
+            this.transform.GetChild(0).localPosition = new Vector3(0f, 0f, -1f);
 
+        }
+
+        //move weapon to the right angle
         if (!float.IsNaN(mouseAngle))
             weapon.transform.localPosition = new Vector3(Mathf.Cos(mouseAngle) * weaponDistance, Mathf.Sin(mouseAngle) * weaponDistance, 0);
 

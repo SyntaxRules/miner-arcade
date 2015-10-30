@@ -74,10 +74,11 @@ public class Weapon : MonoBehaviour {
 
         GameObject temp = Instantiate(dmgCanvas) as GameObject;
         RectTransform tempRect = temp.GetComponent<RectTransform>();
-        temp.transform.SetParent(hitItem.transform);
+        tempRect.position = hitItem.transform.position;
+        //temp.transform.SetParent(hitItem.transform);
         //Debug.Log(hitItem.transform.position);
         //temp.transform.Translate(hitItem.transform.position);//hitItem.transform.position;//Camera.main.WorldToScreenPoint(hitItem.transform.position);// new Vector3(0f, 0f, 0f);
-        temp.transform.localPosition = Vector3.zero;
+        //temp.transform.position = hitItem.transform.position;
 
         temp.GetComponentInChildren<UnityEngine.UI.Text>().text = '-' + displayString;
         temp.GetComponent<Animator>().SetTrigger("Hit");
